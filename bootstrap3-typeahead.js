@@ -67,6 +67,7 @@
     this.afterSelect = this.options.afterSelect;
     this.addItem = false;
     this.selectKeys = this.options.selectKeys
+    this.trimValue = typeof this.options.trimValue == 'boolean' ? this.options.trimValue : false;
   };
 
   Typeahead.prototype = {
@@ -128,13 +129,17 @@
         this.query = this.$element.val() ||  '';
       }
 
+      if (this.trimValue) {
+        this.query = this.query.trim()
+      }
+
       if (this.query.length < this.options.minLength) {
         return this.shown ? this.hide() : this;
       }
 
       var worker = $.proxy(function() {
 
-        if($.isFunction(this.source)) this.source(this.query, $.proxy(this.process, this));
+      if($.isFunction(this.source)) this.source(this.query, $.proxy(this.process, this));
         else if (this.source) {
           this.process(this.source);
         }
@@ -335,8 +340,6 @@
           this.next();
           break;
       }
-
-      e.stopPropagation();
     },
 
     keydown: function (e) {
@@ -374,7 +377,6 @@
           }
       }
 
-      e.stopPropagation();
       e.preventDefault();
    },
 
@@ -393,7 +395,6 @@
     },
 
     click: function (e) {
-      e.stopPropagation();
       e.preventDefault();
       this.select();
       this.$element.focus();
@@ -450,6 +451,7 @@
   , addItem: false
   , delay: 0
   , selectKeys: [9, 13] // [tab, enter]
+  , trimValue: false
   };
 
   $.fn.typeahead.Constructor = Typeahead;
