@@ -409,8 +409,10 @@
     mouseleave: function (e) {
       this.mousedover = false;
       if (!this.focused && this.shown) this.hide();
+    },
+    val: function (newVal) {
+      this.$element.val(newVal)
     }
-
   };
 
 
